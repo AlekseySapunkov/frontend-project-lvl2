@@ -11,6 +11,9 @@ install-deps:
 
 make lint:
 	npx eslint .
+	
+run:
+	bin/gendiff.js
 
 test:
 	npm test
