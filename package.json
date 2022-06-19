@@ -23,6 +23,11 @@
     "url": "https://github.com/AlekseySapunkov/frontend-project-lvl2/issues"
   },
   "homepage": "https://github.com/AlekseySapunkov/frontend-project-lvl2#readme",
+  "devDependencies": {
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  },
   "dependencies": {
     "commander": "^9.3.0"
   }
