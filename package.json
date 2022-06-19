@@ -1,0 +1,26 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "Semantic compare tool",
+  "main": "./src/gendiff.js",
+  "scripts": {
+    "test": "npx jest"
+  },
+  "bin": {
+    "gendiff": "./bin/gendiff.js"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlekseySapunkov/frontend-project-lvl2.git"
+  },
+  "keywords": [
+    "hexlet"
+  ],
+  "author": "Sapunkov Aeksey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlekseySapunkov/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/AlekseySapunkov/frontend-project-lvl2#readme"
+}
