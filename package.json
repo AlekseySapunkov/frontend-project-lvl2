@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/AlekseySapunkov/frontend-project-lvl2/issues"
   },
-  "homepage": "https://github.com/AlekseySapunkov/frontend-project-lvl2#readme"
+  "homepage": "https://github.com/AlekseySapunkov/frontend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^9.3.0"
+  }
 }
