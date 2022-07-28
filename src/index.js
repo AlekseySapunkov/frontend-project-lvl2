@@ -1,1 +1,1 @@
-import generateDiff from
+import generateDiff from 'generateDiff.js';
