@@ -1,4 +1,4 @@
-import { gen } from '../src/generateDiff.js';
+import { generateDiff } from '../src/generateDiff.js';
 
 if (capitalize('hello') !== 'Hello') {
   throw new Error('Функция работает неверно!');

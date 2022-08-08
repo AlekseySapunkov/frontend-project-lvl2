@@ -14,5 +14,6 @@ const generateDiff = (data1, data2) => {
     };
     return `- ${key}: ${data1.key}\n${key}: ${data2.key}`;
   });
+  return difference;
 };
 export default generateDiff;
