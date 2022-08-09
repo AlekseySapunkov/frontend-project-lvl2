@@ -1,11 +1,11 @@
-import { readFileSync } from 'fs';
-import { dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import path from 'path';
+import fs from 'fs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const readFileData = (filePath) => {
+  const absoluteFilePath = path.resolve(process.cwd(), filePath);
+  const dataFile = fs.readFileSync(absoluteFilePath, 'utf-8');
 
-const getFixturePath = (filename) => resolve(__dirname, '..', '__fixtures__', filename);
-const readFile = (filename) => readFileSync(getFixturePath(filename), 'utf-8');
+  return dataFile;
+};
 
-export default readFile;
+export default readFileData;
