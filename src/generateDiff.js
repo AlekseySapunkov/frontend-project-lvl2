@@ -1,19 +1,47 @@
 import _ from 'lodash';
 
-const generateDiff = (data1, data2) => {
-  const uniqKey = _.union(Object.keys(data1), Object.keys(data2));
-  const difference = _.sortBy(uniqKey).map((key) => {
-    if (Object.hasOwn(data1, key) && Object.hasOwn(data2, key)) {
-      if ( data1.key !== data2.key) {
-        return `- ${key}: ${data1.key}\n${key}: ${data2.key}`;
-      }
-      return `${key}: ${data1.key}`;
+const findDiff = (obj1, obj2) => {
+  const sortedKeys = _.sortBy(Object.keys({ ...obj1, ...obj2 }));
+  const result = sortedKeys.map((key) => {
+    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
+      return {
+        name: key,
+        children: findDiff(obj1[key], obj2[key]),
+        type: 'nested',
+      };
     }
-    if (Object.hasOwn(data1, key) && !Object.hasOwn(data2, key)) {
-      return `- ${key}: ${data1.key}\n${key}: ${data2.key}`;
+    if (!_.has(obj2, key)) {
+      return {
+        name: key,
+        value: obj1[key],
+        type: 'deleted',
+      };
+    }
+    if (!_.has(obj1, key)) {
+      return {
+        name: key,
+        value: obj2[key],
+        type: 'added',
+      };
+    }
+    if (_.has(obj1, key) && _.has(obj2, key)) {
+      if (obj1[key] !== obj2[key]) {
+        return {
+          name: key,
+          value1: obj1[key],
+          value2: obj2[key],
+          type: 'changed',
+        };
+      }
+    }
+    return {
+      name: key,
+      value: obj1[key],
+      type: 'unchanged',
     };
-    return `- ${key}: ${data1.key}\n${key}: ${data2.key}`;
   });
-  return difference;
+  return result;
 };
-export default generateDiff;
+
+const diffTree = (obj1, obj2) => ({ type: 'root', children: findDiff(obj1, obj2) });
+export default diffTree;
