@@ -1,40 +1,47 @@
 import _ from 'lodash';
 
-const stylish = (tree, replacer = ' ') => {
-  const getIndent = (spasesCount) => replacer.repeat((spasesCount * 2));
-  const getBracketIndent = (spasesCount) => replacer.repeat((spasesCount * 2) - 2);
+const makeIndent = (depth, replacer = ' ', spacesCount = 4) => replacer.repeat(depth * spacesCount - 2);
 
-  const iter = (node, depth) => {
-    const newIndent = getIndent(depth);
-    const bracketIndent = getBracketIndent(depth);
-    const values = (currentValue, level) => {
-      if (!_.isObject(currentValue)) {
-        return `${currentValue}`;
-      }
-      const lines = Object
-        .entries(currentValue)
-        .map(([key, value]) => `${getIndent(level)}  ${key}: ${values(value, level + 2)}`);
-      return ['{', ...lines, `${getBracketIndent(level)}}`].join('\n');
-    };
+const valueFromation = (data, stylish, depth = 1) => {
+  if (!_.isObject(data)) {
+    return data;
+  }
+  const keys = Object.keys(data);
+  const result = keys.map((name) => {
+    const value = data[name];
+    return stylish({ name, value, type: 'unchanged' }, depth + 1);
+  });
+  return `{\n${result.join('\n')}\n  ${makeIndent(depth)}}`;
+};
 
-    const stringRepresentation = node.map((item) => {
-      if (item.type === 'added') {
-        return `${newIndent}+ ${item.key}: ${values(item.value, depth + 2)}`;
-      }
-      if (item.type === 'deleted') {
-        return `${newIndent}- ${item.key}: ${values(item.value, depth + 2)}`;
-      }
-      if (item.type === 'nested') {
-        return `${newIndent}  ${item.key}: ${iter(item.children, depth + 2)}`;
-      }
-      if (item.type === 'unchanged') {
-        return `${newIndent}  ${item.key}: ${values(item.value, depth + 2)}`;
-      }
-      return `${newIndent}- ${item.key}: ${values(item.firstValue, depth + 2)}\n${newIndent}+ ${item.key}: ${values(item.secondValue, depth + 2)}`;
-    });
-    return ['{', ...stringRepresentation, `${bracketIndent}}`].join('\n');
-  };
-  return iter(tree, 1);
+const stylish = (diff, depth = 0) => {
+  const {
+    name, value, type, value1, value2, children,
+  } = diff;
+
+  switch (type) {
+    case 'root': {
+      const resultLine = children.flatMap((child) => stylish(child, depth + 1));
+      return `{\n${resultLine.join('\n')}\n}`;
+    }
+    case 'nested': {
+      const resultLine = children.flatMap((child) => stylish(child, depth + 1));
+      return `${makeIndent(depth)}  ${name}: {\n${resultLine.join('\n')}\n${makeIndent(depth)}  }`;
+    }
+    case 'added':
+      return `${makeIndent(depth)}+ ${name}: ${valueFromation(value, stylish, depth)}`;
+    case 'deleted':
+      return `${makeIndent(depth)}- ${name}: ${valueFromation(value, stylish, depth)}`;
+    case 'unchanged':
+      return `${makeIndent(depth)}  ${name}: ${valueFromation(value, stylish, depth)}`;
+    case 'changed': {
+      const removed = `${makeIndent(depth)}- ${name}: ${valueFromation(value1, stylish, depth)}`;
+      const added = `${makeIndent(depth)}+ ${name}: ${valueFromation(value2, stylish, depth)}`;
+      return `${removed}\n${added}`;
+    }
+    default:
+      throw new Error(`Type: ${type} is undefined`);
+  }
 };
 
 export default stylish;

@@ -11,10 +11,10 @@ const readFile = (filepath) => fs.readFileSync(getPathFile(filepath), 'utf-8');
 const genDiff = (filepath1, filepath2, format = 'stylish') => {
   const dataFromFilepath1 = readFile(filepath1);
   const dataFromFilepath2 = readFile(filepath2);
-  const file1obj = parse(dataFromFilepath1, selectFormat(filepath1));
-  const file2obj = parse(dataFromFilepath2, selectFormat(filepath2));
+  const file1obj = parse(dataFromFilepath1, getFileFormat(filepath1));
+  const file2obj = parse(dataFromFilepath2, getFileFormat(filepath2));
   const diff = diffTree(file1obj, file2obj);
-  return getFormat(diff, format);
+  return selectFormat(diff, format);
 };
 
 export default genDiff;
