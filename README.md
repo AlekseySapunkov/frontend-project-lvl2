@@ -8,3 +8,5 @@ The command line  tool that compares two configuration files (yaml, json) and sh
 [![Node CI](https://github.com/AlekseySapunkov/frontend-project-lvl2/actions/workflows/makefile.yml/badge.svg)](https://github.com/AlekseySapunkov/frontend-project-lvl2/actions/workflows/makefile.yml)
 ### Comparing two flat json files:
 [![asciicast](https://asciinema.org/a/RkxjdMEZtuAKexoRx5ypbmfSG.svg)](https://asciinema.org/a/RkxjdMEZtuAKexoRx5ypbmfSG)
+### Gendiff demonstration of nested files plus stylish formatter
+[![asciicast](https://asciinema.org/a/Q5lmEmmDimBA4dmsMEX8QAAyf.svg)](https://asciinema.org/a/Q5lmEmmDimBA4dmsMEX8QAAyf)
