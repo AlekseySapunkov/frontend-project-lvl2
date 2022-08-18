@@ -20,7 +20,9 @@ test.each([
   },
   {
     a: '__fixtures__/file1Recurse.json', b: '__fixtures__/file2Recurse.json', c: 'stylish', expected: 'stylishOutput.txt',
-  }])('genDiffTest', ({ a, b, c, expected }) => {
+  }])('genDiffTest', ({
+  a, b, c, expected,
+}) => {
   const dif = genDiff(a, b, c);
   const expectedResult = readFile(expected);
   expect(dif).toEqual(expectedResult);
