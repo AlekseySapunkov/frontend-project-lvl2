@@ -1,47 +1,57 @@
 import _ from 'lodash';
 
-const makeIndent = (depth, replacer = ' ', spacesCount = 4) => replacer.repeat(depth * spacesCount - 2);
+const getIndent = (depth, spacesCount = 4) => ' '.repeat(depth * spacesCount - 2);
 
-const valueFromation = (data, stylish, depth = 1) => {
-  if (!_.isObject(data)) {
-    return data;
+const stringify = (inputValue, depth) => {
+  if (!_.isPlainObject(inputValue)) {
+    return inputValue;
   }
-  const keys = Object.keys(data);
-  const result = keys.map((name) => {
-    const value = data[name];
-    return stylish({ name, value, type: 'unchanged' }, depth + 1);
+
+  const obj = inputValue;
+  const keys = Object.keys(obj);
+  const indent = getIndent(depth);
+  const braceIndent = getIndent(depth - 1);
+
+  const innerPart = keys.map((key) => {
+    const currentValue = obj[key];
+    if (_.isPlainObject(currentValue)) {
+      return `${indent}  ${key}: ${stringify(currentValue, depth + 1)}`;
+    }
+
+    return `${indent}  ${key}: ${currentValue}`;
   });
-  return `{\n${result.join('\n')}\n  ${makeIndent(depth)}}`;
+
+  return `{\n${innerPart.join('\n')}\n${braceIndent}  }`;
 };
 
-const stylish = (diff, depth = 0) => {
-  const {
-    name, value, type, value1, value2, children,
-  } = diff;
+const stylish = (diff) => {
+  const iter = (depth, node) => node.flatMap((child) => {
+    const {
+      name, value, status, oldValue, children,
+    } = child;
+    const indent = getIndent(depth);
+    const nextLevelDepth = depth + 1;
 
-  switch (type) {
-    case 'root': {
-      const resultLine = children.flatMap((child) => stylish(child, depth + 1));
-      return `{\n${resultLine.join('\n')}\n}`;
+    switch (status) {
+      case 'nested':
+        return `${indent}  ${name}: {\n${iter(nextLevelDepth, children)}\n${indent}  }`.split(',');
+      case 'updated':
+        return `${indent}- ${name}: ${stringify(oldValue, nextLevelDepth)}\n${indent}+ ${name}: ${stringify(value, nextLevelDepth)}`;
+      case 'added':
+        return `${indent}+ ${name}: ${stringify(value, nextLevelDepth)}`;
+      case 'removed':
+        return `${indent}- ${name}: ${stringify(value, nextLevelDepth)}`;
+      case 'unchanged':
+        return `${indent}  ${name}: ${value}`;
+      default:
+        throw new Error(`Unexpected condition ${status}. Please check the input data.`);
     }
-    case 'nested': {
-      const resultLine = children.flatMap((child) => stylish(child, depth + 1));
-      return `${makeIndent(depth)}  ${name}: {\n${resultLine.join('\n')}\n${makeIndent(depth)}  }`;
-    }
-    case 'added':
-      return `${makeIndent(depth)}+ ${name}: ${valueFromation(value, stylish, depth)}`;
-    case 'deleted':
-      return `${makeIndent(depth)}- ${name}: ${valueFromation(value, stylish, depth)}`;
-    case 'unchanged':
-      return `${makeIndent(depth)}  ${name}: ${valueFromation(value, stylish, depth)}`;
-    case 'changed': {
-      const removed = `${makeIndent(depth)}- ${name}: ${valueFromation(value1, stylish, depth)}`;
-      const added = `${makeIndent(depth)}+ ${name}: ${valueFromation(value2, stylish, depth)}`;
-      return `${removed}\n${added}`;
-    }
-    default:
-      throw new Error(`Type: ${type} is undefined`);
-  }
+  });
+
+  const startDepth = 1;
+  const innerPart = iter(startDepth, diff);
+
+  return `{\n${innerPart.join('\n')}\n}`;
 };
 
 export default stylish;
