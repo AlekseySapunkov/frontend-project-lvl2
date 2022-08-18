@@ -10,10 +10,10 @@ const findDiff = (obj1, obj2) => {
     const hasFirstObjKey = _.has(obj1, key);
     const hasSecondObjKey = _.has(obj2, key);
 
-    if (!hasSecondObjKey) {
+    if (!Object.hasOwn(obj2, key)) {
       return { name: key, value: firstValue, status: 'removed' };
     }
-    if (!hasFirstObjKey) {
+    if (!Object.hasOwn(obj1, key)) {
       return { name: key, value: secondValue, status: 'added' };
     }
     if (_.isPlainObject(firstValue) && _.isPlainObject(secondValue)) {
