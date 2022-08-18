@@ -6,10 +6,6 @@ const findDiff = (obj1, obj2) => {
   const difference = keys.map((key) => {
     const firstValue = obj1[key];
     const secondValue = obj2[key];
-
-    const hasFirstObjKey = _.has(obj1, key);
-    const hasSecondObjKey = _.has(obj2, key);
-
     if (!Object.hasOwn(obj2, key)) {
       return { name: key, value: firstValue, status: 'removed' };
     }
