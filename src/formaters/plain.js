@@ -1,35 +1,39 @@
 import _ from 'lodash';
 
-const plain = (tree) => {
-  const getValidValue = (value) => {
-    if (_.isObject(value)) {
-      return '[complex value]';
+const stringify = (value) => {
+  if (_.isPlainObject(value)) {
+    return '[complex value]';
+  }
+
+  return typeof value === 'string' ? `'${value}'` : value;
+};
+
+const plain = (diff) => {
+  const iter = (tree, path) => tree.flatMap((node) => {
+    const {
+      name, value, oldValue, status, children,
+    } = node;
+
+    const outputValue = stringify(value);
+    const outputOldValue = stringify(oldValue);
+    const currentPath = [...path, name];
+    const currentPathStr = currentPath.join('.');
+
+    switch (status) {
+      case 'nested':
+        return iter(children, currentPath);
+      case 'added':
+        return `Property '${currentPathStr}' was added with value: ${outputValue}`;
+      case 'removed':
+        return `Property '${currentPathStr}' was removed`;
+      case 'updated':
+        return `Property '${currentPathStr}' was updated. From ${outputOldValue} to ${outputValue}`;
+      default:
+        return [];
     }
-    if (_.isString(value)) {
-      return `'${value}'`;
-    }
-    return value;
-  };
-  const getPath = (path, key) => [...path, key].join('.');
-  const iter = (node, depth) => {
-    const plainFormat = node.flatMap((item) => {
-      if (item.type === 'deleted') {
-        return `Property '${getPath(depth, item.key)}' was removed`;
-      }
-      if (item.type === 'added') {
-        return `Property '${getPath(depth, item.key)}' was added with value: ${getValidValue(item.value)}`;
-      }
-      if (item.type === 'nested') {
-        return iter(item.children, [...depth, item.key]);
-      }
-      if (item.type === 'changed') {
-        return `Property '${getPath(depth, item.key)}' was updated. From ${getValidValue(item.firstValue)} to ${getValidValue(item.secondValue)}`;
-      }
-      return [];
-    });
-    return plainFormat.join('\n');
-  };
-  return iter(tree, []);
+  });
+
+  return iter(diff, []).join('\n');
 };
 
 export default plain;
