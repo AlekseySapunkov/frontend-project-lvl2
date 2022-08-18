@@ -10,17 +10,17 @@ const getFixturePath = (filename) => resolve(__dirname, '..', '__fixtures__', fi
 const readFile = (filepath) => fs.readFileSync(getFixturePath(filepath), 'utf-8');
 test.each([
   {
-    a: '__fixtures__/file1.json', b: '__fixtures__/file2.json', c: 'stylish', expected: 'flatFileOutput.txt' 
+    a: '__fixtures__/file1.json', b: '__fixtures__/file2.json', c: 'stylish', expected: 'flatFileOutput.txt',
   },
   {
-    a: '__fixtures__/file1Recurse.json', b: '__fixtures__/file2Recurse.yaml', c: 'json', expected: 'jsonOutput.txt' 
+    a: '__fixtures__/file1Recurse.json', b: '__fixtures__/file2Recurse.yaml', c: 'json', expected: 'jsonOutput.txt',
   },
   {
-    a: '__fixtures__/file1Recurse.json', b: '__fixtures__/file2Recurse.yaml', c: 'plain', expected: 'plainOutput.txt'
+    a: '__fixtures__/file1Recurse.json', b: '__fixtures__/file2Recurse.yaml', c: 'plain', expected: 'plainOutput.txt',
   },
   {
-    a: '__fixtures__/file1Recurse.json', b: '__fixtures__/file2Recurse.json', c: 'stylish', expected: 'stylishOutput.txt' 
-  }])('genDiffTest', ( {a, b, c, expected} ) => {
+    a: '__fixtures__/file1Recurse.json', b: '__fixtures__/file2Recurse.json', c: 'stylish', expected: 'stylishOutput.txt',
+  }])('genDiffTest', ({ a, b, c, expected }) => {
   const dif = genDiff(a, b, c);
   const expectedResult = readFile(expected);
   expect(dif).toEqual(expectedResult);
