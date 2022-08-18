@@ -5,7 +5,7 @@ import parse from './parser.js';
 import selectFormat from './formaters/index.js';
 
 const getFileFormat = (filepath) => path.extname(filepath).slice(1);
-const getFixturePath = (filepath) => path.join(process.cwd(), filepath).trim();
+const getFixturePath = (filepath) => path.resolve(process.cwd(), filepath).trim();
 const readFile = (filepath) => fs.readFileSync(getFixturePath(filepath), 'utf-8');
 
 const genDiff = (filepath1, filepath2, format = 'stylish') => {
