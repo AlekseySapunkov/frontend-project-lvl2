@@ -1,47 +1,34 @@
 import _ from 'lodash';
 
 const findDiff = (obj1, obj2) => {
-  const sortedKeys = _.sortBy(Object.keys({ ...obj1, ...obj2 }));
-  const result = sortedKeys.map((key) => {
-    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
+  const keys = _.sortBy(_.union(_.keys(obj1), _.keys(obj2)));
+
+  const difference = keys.map((key) => {
+    const firstValue = obj1[key];
+    const secondValue = obj2[key];
+
+    const hasFirstObjKey = _.has(obj1, key);
+    const hasSecondObjKey = _.has(obj2, key);
+
+    if (!hasSecondObjKey) {
+      return { name: key, value: firstValue, status: 'removed' };
+    }
+    if (!hasFirstObjKey) {
+      return { name: key, value: secondValue, status: 'added' };
+    }
+    if (_.isPlainObject(firstValue) && _.isPlainObject(secondValue)) {
+      return { name: key, status: 'nested', children: findDiff(firstValue, secondValue) };
+    }
+    if (!_.isEqual(firstValue, secondValue)) {
       return {
-        name: key,
-        children: findDiff(obj1[key], obj2[key]),
-        type: 'nested',
+        name: key, value: secondValue, status: 'updated', oldValue: firstValue,
       };
     }
-    if (!_.has(obj2, key)) {
-      return {
-        name: key,
-        value: obj1[key],
-        type: 'deleted',
-      };
-    }
-    if (!_.has(obj1, key)) {
-      return {
-        name: key,
-        value: obj2[key],
-        type: 'added',
-      };
-    }
-    if (_.has(obj1, key) && _.has(obj2, key)) {
-      if (obj1[key] !== obj2[key]) {
-        return {
-          name: key,
-          value1: obj1[key],
-          value2: obj2[key],
-          type: 'changed',
-        };
-      }
-    }
-    return {
-      name: key,
-      value: obj1[key],
-      type: 'unchanged',
-    };
-  });
-  return result;
+
+    return { name: key, value: firstValue, status: 'unchanged' };
+  }, []);
+
+  return difference;
 };
 
-const diffTree = (obj1, obj2) => ({ type: 'root', children: findDiff(obj1, obj2) });
-export default diffTree;
+export default findDiff;
