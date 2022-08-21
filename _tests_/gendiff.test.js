@@ -9,7 +9,7 @@ const getFixturePath = (filename) => resolve(__dirname, '..', '__fixtures__', fi
 const readFile = (filepath) => fs.readFileSync(getFixturePath(filepath), 'utf-8');
 test.each([
   {
-    a: '__fixtures__/file1.json', b: '__fixtures__/file2.json', c: 'stylish', expected: 'flatFileOutput.txt',
+    a: '__fixtures__/file1.json', b: '__fixtures__/file2.json', expected: 'flatFileOutput.txt',
   },
   {
     a: '__fixtures__/file1Recurse.json', b: '__fixtures__/file2Recurse.yaml', c: 'json', expected: 'jsonOutput.txt',
