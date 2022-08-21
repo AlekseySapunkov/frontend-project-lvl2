@@ -10,4 +10,7 @@ The command line  tool that compares two configuration files (yaml, json) and sh
 [![asciicast](https://asciinema.org/a/RkxjdMEZtuAKexoRx5ypbmfSG.svg)](https://asciinema.org/a/RkxjdMEZtuAKexoRx5ypbmfSG)
 ### Gendiff demonstration of nested files plus stylish formatter
 [![asciicast](https://asciinema.org/a/Q5lmEmmDimBA4dmsMEX8QAAyf.svg)](https://asciinema.org/a/Q5lmEmmDimBA4dmsMEX8QAAyf)
-### Gendiff demonstration of nested files with json formatter
+### Gendiff demonstration  with plain formatter
+[![asciicast](https://asciinema.org/a/LZwtQZqB5fmZ1Z4Gf3tFIC8uU.svg)](https://asciinema.org/a/LZwtQZqB5fmZ1Z4Gf3tFIC8uU)
+### Gendiff demonstration  with json formatter
+[![asciicast](https://asciinema.org/a/3tLiatO0Jps5IpafsBpwiUdTo.svg)](https://asciinema.org/a/3tLiatO0Jps5IpafsBpwiUdTo)
