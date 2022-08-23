@@ -4,24 +4,22 @@ const findDiff = (tree1, tree2) => {
   const keys = _.sortBy(_.union(_.keys(tree1), _.keys(tree2)));
 
   const difference = keys.map((key) => {
-    const firstValue = tree1[key];
-    const secondValue = tree2[key];
     if (!Object.hasOwn(tree2, key)) {
-      return { name: key, value: firstValue, status: 'removed' };
+      return { name: key, value: tree1[key], status: 'removed' };
     }
     if (!Object.hasOwn(tree1, key)) {
-      return { name: key, value: secondValue, status: 'added' };
+      return { name: key, value: tree2[key], status: 'added' };
     }
-    if (_.isPlainObject(firstValue) && _.isPlainObject(secondValue)) {
-      return { name: key, status: 'nested', children: findDiff(firstValue, secondValue) };
+    if (_.isPlainObject(tree1[key]) && _.isPlainObject(tree2[key])) {
+      return { name: key, status: 'nested', children: findDiff(tree1[key], tree2[key]) };
     }
-    if (!_.isEqual(firstValue, secondValue)) {
+    if (!_.isEqual(tree1[key], tree2[key])) {
       return {
-        name: key, value: secondValue, status: 'updated', oldValue: firstValue,
+        name: key, value: tree2[key], status: 'updated', oldValue: tree1[key],
       };
     }
 
-    return { name: key, value: firstValue, status: 'unchanged' };
+    return { name: key, value: tree1[key], status: 'unchanged' };
   }, []);
 
   return difference;
