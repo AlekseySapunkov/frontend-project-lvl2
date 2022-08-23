@@ -1,13 +1,15 @@
 install:
 	npm ci
 	chmod +x bin/*.js
-	npm link
 
 publish:
 	npm publish --dry-run
 
 make lint:
 	npx eslint .
+
+link:
+	npm link
 	
 run:
 	bin/gendiff.js
