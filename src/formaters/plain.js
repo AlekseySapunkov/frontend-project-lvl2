@@ -29,7 +29,7 @@ const plain = (diff) => {
       case 'updated':
         return `Property '${currentPathStr}' was updated. From ${outputOldValue} to ${outputValue}`;
       default:
-        return [];
+        return null;
     }
   });
 
