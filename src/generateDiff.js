@@ -1,15 +1,15 @@
 import _ from 'lodash';
 
-const findDiff = (obj1, obj2) => {
-  const keys = _.sortBy(_.union(_.keys(obj1), _.keys(obj2)));
+const findDiff = (tree1, tree2) => {
+  const keys = _.sortBy(_.union(_.keys(tree1), _.keys(tree2)));
 
   const difference = keys.map((key) => {
-    const firstValue = obj1[key];
-    const secondValue = obj2[key];
-    if (!Object.hasOwn(obj2, key)) {
+    const firstValue = tree1[key];
+    const secondValue = tree2[key];
+    if (!Object.hasOwn(tree2, key)) {
       return { name: key, value: firstValue, status: 'removed' };
     }
-    if (!Object.hasOwn(obj1, key)) {
+    if (!Object.hasOwn(tree1, key)) {
       return { name: key, value: secondValue, status: 'added' };
     }
     if (_.isPlainObject(firstValue) && _.isPlainObject(secondValue)) {
