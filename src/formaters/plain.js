@@ -33,7 +33,7 @@ const plain = (diff) => {
     }
   });
 
-  return iter(diff, []).join('\n');
+  return iter(diff, []).filter((element) => element !== null).join('\n');
 };
 
 export default plain;
