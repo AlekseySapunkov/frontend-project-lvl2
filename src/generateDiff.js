@@ -15,7 +15,7 @@ const findDiff = (tree1, tree2) => {
     }
     if (!_.isEqual(tree1[key], tree2[key])) {
       return {
-        name: key, value: tree2[key], status: 'updated', oldValue: tree1[key],
+        name: key, value: tree2[key], status: 'changed', removedValue: tree1[key],
       };
     }
 
