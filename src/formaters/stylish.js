@@ -7,13 +7,12 @@ const stringify = (inputValue, depth) => {
     return inputValue;
   }
 
-  const obj = inputValue;
-  const keys = Object.keys(obj);
+  const keys = Object.keys(inputValue);
   const indent = getIndent(depth);
   const braceIndent = getIndent(depth - 1);
 
   const innerPart = keys.map((key) => {
-    const currentValue = obj[key];
+    const currentValue = inputValue[key];
     if (_.isPlainObject(currentValue)) {
       return `${indent}  ${key}: ${stringify(currentValue, depth + 1)}`;
     }
@@ -26,25 +25,22 @@ const stringify = (inputValue, depth) => {
 
 const stylish = (diff) => {
   const iter = (depth, node) => node.flatMap((child) => {
-    const {
-      name, value, status, oldValue, children,
-    } = child;
     const indent = getIndent(depth);
     const nextLevelDepth = depth + 1;
 
-    switch (status) {
+    switch (child.status) {
       case 'nested':
-        return `${indent}  ${name}: {\n${iter(nextLevelDepth, children)}\n${indent}  }`.split(',');
-      case 'updated':
-        return `${indent}- ${name}: ${stringify(oldValue, nextLevelDepth)}\n${indent}+ ${name}: ${stringify(value, nextLevelDepth)}`;
+        return `${indent}  ${child.name}: {\n${iter(nextLevelDepth, child.children)}\n${indent}  }`.split(',');
+      case 'changed':
+        return `${indent}- ${child.name}: ${stringify(child.removedValue, nextLevelDepth)}\n${indent}+ ${child.name}: ${stringify(child.value, nextLevelDepth)}`;
       case 'added':
-        return `${indent}+ ${name}: ${stringify(value, nextLevelDepth)}`;
+        return `${indent}+ ${child.name}: ${stringify(child.value, nextLevelDepth)}`;
       case 'removed':
-        return `${indent}- ${name}: ${stringify(value, nextLevelDepth)}`;
+        return `${indent}- ${child.name}: ${stringify(child.value, nextLevelDepth)}`;
       case 'unchanged':
-        return `${indent}  ${name}: ${value}`;
+        return `${indent}  ${child.name}: ${child.value}`;
       default:
-        throw new Error(`Unexpected condition ${status}. Please check the input data.`);
+        throw new Error(`Unexpected condition ${child.status}. Please check the input data.`);
     }
   });
 
