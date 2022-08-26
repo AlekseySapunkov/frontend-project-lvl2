@@ -10,24 +10,18 @@ const stringify = (value) => {
 
 const plain = (diff) => {
   const iter = (tree, path) => tree.flatMap((node) => {
-    const {
-      name, value, oldValue, status, children,
-    } = node;
-
-    const outputValue = stringify(value);
-    const outputOldValue = stringify(oldValue);
-    const currentPath = [...path, name];
+    const currentPath = [...path, node.name];
     const currentPathStr = currentPath.join('.');
 
-    switch (status) {
+    switch (node.status) {
       case 'nested':
-        return iter(children, currentPath);
+        return iter(node.children, currentPath);
       case 'added':
-        return `Property '${currentPathStr}' was added with value: ${outputValue}`;
+        return `Property '${currentPathStr}' was added with value: ${stringify(node.value)}`;
       case 'removed':
         return `Property '${currentPathStr}' was removed`;
-      case 'updated':
-        return `Property '${currentPathStr}' was updated. From ${outputOldValue} to ${outputValue}`;
+      case 'changed':
+        return `Property '${currentPathStr}' was changed. From ${stringify(node.removedValue)} to ${stringify(node.value)}`;
       default:
         return null;
     }
