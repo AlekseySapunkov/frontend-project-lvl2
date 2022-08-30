@@ -3,7 +3,7 @@ import _ from 'lodash';
 const generateDiff = (data1, data2) => {
   const keys = _.sortBy(_.union(_.keys(data1), _.keys(data2)));
 
-  const difference = keys.map((key) => {
+  const differences = keys.map((key) => {
     if (!Object.hasOwn(data2, key)) {
       return { name: key, value: data1[key], status: 'removed' };
     }
@@ -22,7 +22,7 @@ const generateDiff = (data1, data2) => {
     return { name: key, value: data1[key], status: 'unchanged' };
   }, []);
 
-  return difference;
+  return differences;
 };
 
 export default generateDiff;
