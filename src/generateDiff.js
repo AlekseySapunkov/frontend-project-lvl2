@@ -20,7 +20,7 @@ const generateDiff = (data1, data2) => {
     }
 
     return { name: key, value: data1[key], status: 'unchanged' };
-  }, []);
+  });
 
   return differences;
 };
