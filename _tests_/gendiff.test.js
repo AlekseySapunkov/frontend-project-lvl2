@@ -17,7 +17,7 @@ test.each([
   {
     file1: 'file1Recurse.json', file2: 'file2Recurse.json', expected: 'stylishOutput.txt',
   }])('genDiffTest', ({
-    file1, file2, format, expected,
+  file1, file2, format, expected,
 }) => {
   const filepath1 = getFixturePath(file1);
   const filepath2 = getFixturePath(file2);
