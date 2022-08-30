@@ -24,23 +24,23 @@ const stringify = (inputValue, depth) => {
 };
 
 const stylish = (diff) => {
-  const iter = (depth, node) => node.flatMap((child) => {
+  const iter = (depth, nodes) => nodes.flatMap((node) => {
     const indent = getIndent(depth);
     const nextLevelDepth = depth + 1;
 
-    switch (child.status) {
+    switch (node.status) {
       case 'nested':
-        return `${indent}  ${child.name}: {\n${iter(nextLevelDepth, child.children)}\n${indent}  }`.split(',');
+        return `${indent}  ${node.name}: {\n${iter(nextLevelDepth, node.children)}\n${indent}  }`.split(',');
       case 'changed':
-        return `${indent}- ${child.name}: ${stringify(child.removedValue, nextLevelDepth)}\n${indent}+ ${child.name}: ${stringify(child.value, nextLevelDepth)}`;
+        return `${indent}- ${node.name}: ${stringify(node.removedValue, nextLevelDepth)}\n${indent}+ ${node.name}: ${stringify(node.value, nextLevelDepth)}`;
       case 'added':
-        return `${indent}+ ${child.name}: ${stringify(child.value, nextLevelDepth)}`;
+        return `${indent}+ ${node.name}: ${stringify(node.value, nextLevelDepth)}`;
       case 'removed':
-        return `${indent}- ${child.name}: ${stringify(child.value, nextLevelDepth)}`;
+        return `${indent}- ${node.name}: ${stringify(node.value, nextLevelDepth)}`;
       case 'unchanged':
-        return `${indent}  ${child.name}: ${child.value}`;
+        return `${indent}  ${node.name}: ${node.value}`;
       default:
-        throw new Error(`Unexpected condition ${child.status}. Please check the input data.`);
+        throw new Error(`Unexpected condition ${node.status}. Please check the input data.`);
     }
   });
 
