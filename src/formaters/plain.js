@@ -17,11 +17,11 @@ const plain = (diff) => {
       case 'nested':
         return iter(node.children, currentPath);
       case 'added':
-        return `Property '${currentPathStr}' was added with value: ${stringify(node.value)}`;
+        return `Property '${currentPathStr}' was added with value: ${stringify(node.file1Key)}`;
       case 'removed':
         return `Property '${currentPathStr}' was removed`;
       case 'changed':
-        return `Property '${currentPathStr}' was updated. From ${stringify(node.removedValue)} to ${stringify(node.value)}`;
+        return `Property '${currentPathStr}' was updated. From ${stringify(node.file2Key)} to ${stringify(node.file1Key)}`;
       default:
         return null;
     }
