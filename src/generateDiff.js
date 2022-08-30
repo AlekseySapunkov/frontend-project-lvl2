@@ -11,7 +11,7 @@ const generateDiff = (data1, data2) => {
       return { name: key, value: data2[key], status: 'added' };
     }
     if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-      return { name: key, status: 'nested', children: generateDiff(data1[key],data2[key]) };
+      return { name: key, status: 'nested', children: generateDiff(data1[key], data2[key]) };
     }
     if (!_.isEqual(data1[key], data2[key])) {
       return {
