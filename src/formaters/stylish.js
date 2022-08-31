@@ -32,13 +32,13 @@ const stylish = (diff) => {
       case 'nested':
         return `${indent}  ${node.name}: {\n${iter(nextLevelDepth, node.children)}\n${indent}  }`.split(',');
       case 'changed':
-        return `${indent}- ${node.name}: ${stringify(node.file2Key, nextLevelDepth)}\n${indent}+ ${node.name}: ${stringify(node.file1Key, nextLevelDepth)}`;
+        return `${indent}- ${node.name}: ${stringify(node.addedValue, nextLevelDepth)}\n${indent}+ ${node.name}: ${stringify(node.value, nextLevelDepth)}`;
       case 'added':
-        return `${indent}+ ${node.name}: ${stringify(node.file1Key, nextLevelDepth)}`;
+        return `${indent}+ ${node.name}: ${stringify(node.value, nextLevelDepth)}`;
       case 'removed':
-        return `${indent}- ${node.name}: ${stringify(node.file1Key, nextLevelDepth)}`;
+        return `${indent}- ${node.name}: ${stringify(node.value, nextLevelDepth)}`;
       case 'unchanged':
-        return `${indent}  ${node.name}: ${node.file1Key}`;
+        return `${indent}  ${node.name}: ${node.value}`;
       default:
         throw new Error(`Unexpected condition ${node.status}. Please check the input data.`);
     }
