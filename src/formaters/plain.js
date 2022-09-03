@@ -8,7 +8,7 @@ const stringify = (value) => {
   return typeof value === 'string' ? `'${value}'` : value;
 };
 
-const plain = (diff) => {
+const formatAsPlain = (diff) => {
   const iter = (tree, path) => tree.flatMap((node) => {
     const currentPath = [...path, node.name];
     const currentPathStr = currentPath.join('.');
@@ -32,4 +32,4 @@ const plain = (diff) => {
   return iter(diff, []).filter((element) => element !== null).join('\n');
 };
 
-export default plain;
+export default formatAsPlain;
