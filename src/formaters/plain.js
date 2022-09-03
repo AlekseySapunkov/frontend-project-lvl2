@@ -23,7 +23,7 @@ const plain = (diff) => {
       case 'changed':
         return `Property '${currentPathStr}' was updated. From ${stringify(node.addedValue)} to ${stringify(node.value)}`;
       case 'unchanged':
-        return `Property '${currentPathStr}' was not changed.`;
+        return null;
       default:
         return null;
     }
