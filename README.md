@@ -1,6 +1,9 @@
 # gendiff
 The command line  tool that compares two configuration files (yaml, json) and shows a difference.
-
+## Install
+git clone https://github.com/AlekseySapunkov/frontend-project-lvl2.git
+make install
+make link
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/AlekseySapunkov/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/AlekseySapunkov/frontend-project-lvl2/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/71d4d2d22893ee643b4d/maintainability)](https://codeclimate.com/github/AlekseySapunkov/frontend-project-lvl2/maintainability)
