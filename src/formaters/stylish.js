@@ -23,7 +23,7 @@ const stringify = (inputValue, depth) => {
   return `{\n${innerPart.join('\n')}\n${braceIndent}  }`;
 };
 
-const stylish = (diff) => {
+const formatAsStylish = (diff) => {
   const iter = (depth, nodes) => nodes.flatMap((node) => {
     const indent = getIndent(depth);
     const nextLevelDepth = depth + 1;
@@ -50,4 +50,4 @@ const stylish = (diff) => {
   return `{\n${innerPart.join('\n')}\n}`;
 };
 
-export default stylish;
+export default formatAsStylish;
