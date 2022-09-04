@@ -1,5 +1,4 @@
 import formatAsStylish from './stylish.js';
-import formatAsStylish from './plain.js';
 import formatAsPlain from './plain.js';
 
 const formatData = (data, format) => {
